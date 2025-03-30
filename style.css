@@ -4,6 +4,15 @@ body{
   justify-content: center;
   flex-direction: column;
 }
+header h1{
+  font-size: 45px;
+}
+#new-task{
+  padding: 3px ;
+}
+#new-task::placeholder{
+  font-size: 16px;
+}
 #add-task-btn{
   background-color: #F44336;
   color: white;
