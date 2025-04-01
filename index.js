@@ -69,4 +69,30 @@ function appendTask(id, status,task) {
   </tr>
             `;
 }
+
+let table = document.getElementsByTagName("table")[0];
+table.addEventListener("click", (e) => {
+  // console.log(e.currentTarget);
+  let closestTr = e.target.closest("tr");
+  // console.log(closestTr);
+  if (closestTr == null || closestTr.id != "task") {
+    return;
+  }
+  let id = closestTr.dataset.taskId;
+  let tasks = localStorage.getItem("tasks");
+  if (e.target.id == "done-btn") {
+    let start = tasks.indexOf(id) + id.length + 1;
+    let end = start + "Pinding".length;
+    if (tasks.slice(start, end) != "Pinding") return;
+    tasks = tasks.slice(0, start) + "Completed" + tasks.slice(end);
+    localStorage.setItem("tasks", tasks);
+    updateListData();
+  } else if (e.target.id == "edit-btn") {
+   
+  } else if (e.target.id == "delete-btn") {
+
+  } else {
+    return;
+  }
+});
 // localStorage.clear();
