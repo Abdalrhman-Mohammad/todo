@@ -88,7 +88,44 @@ table.addEventListener("click", (e) => {
     localStorage.setItem("tasks", tasks);
     updateListData();
   } else if (e.target.id == "edit-btn") {
-   
+    let description = closestTr.querySelector("#description");
+    // console.log("-----------");
+    // console.log(x);
+    let value = description.innerHTML;
+    description.innerHTML = `
+    <input type="text" class="edit-task-content" placeholder="Add new task..." value="${value}"/>
+      <input type="button" class="save-task-btn" value="save" />
+      <input type="button" class="cancel-task-btn" value="cancel" />
+    `;
+    let saveTask = closestTr.querySelector(".save-task-btn");
+    let cancelTask = closestTr.querySelector(".cancel-task-btn");
+    saveTask.addEventListener("click", () => {
+      let taskContent = closestTr.querySelector(".edit-task-content").value;
+      taskContent = taskContent.trim();
+      if (taskContent.length == 0) {
+        alert("Not allowed the todo be empty or just have spaces!!!")
+        return;
+      }
+      // console.log(taskContent);
+      // console.log(taskContent, "-----------");
+      // console.log(closestTr.querySelector(".edit-task-content"), "-----------");
+      let start = tasks.indexOf(id);
+      if (start != -1) {
+        start = tasks.indexOf("#", start + 1);
+        if (start != -1) start = tasks.indexOf("#", start + 1);
+      }
+      let end = tasks.indexOf("#", start + 1);
+      if (end == -1) end = tasks.length;
+      // console.log(tasks);
+      // console.log(tasks.slice(0, start+1) + taskContent + tasks.slice(end));
+      // console.log(start, end);
+      tasks = tasks.slice(0, start + 1) + taskContent + tasks.slice(end);
+      description.innerHTML = taskContent;
+      localStorage.setItem("tasks", tasks);
+    });
+    cancelTask.addEventListener("click", () => {
+      description.innerHTML = value;
+    });
   } else if (e.target.id == "delete-btn") {
     let start = tasks.indexOf(id) - 1;
     let end = tasks.indexOf("#", start + 1);
