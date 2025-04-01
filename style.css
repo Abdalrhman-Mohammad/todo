@@ -20,7 +20,7 @@ header h1 {
 #new-task::placeholder {
   font-size: 20px;
 }
-#add-task-btn {
+button {
   background-color: #f44336;
   color: white;
 
@@ -29,6 +29,12 @@ header h1 {
 
   padding: 8px 12px;
   font-size: 14px;
+}
+#done-btn {
+  background-color: rgb(38, 180, 38);
+}
+#edit-btn {
+  background-color: #4088db;
 }
 #add-task-btn:hover {
   cursor: pointer;
