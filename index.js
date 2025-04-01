@@ -53,7 +53,7 @@ addTaskBtn.addEventListener("click", () => {
   );
   localStorage.setItem("id", parseInt(localStorage.getItem("id")) + 1);
   console.log(localStorage.getItem("tasks"));
-  appendTask(parseInt(localStorage.getItem("id"))-1,newTaskValue);
+  appendTask(parseInt(localStorage.getItem("id"))-1,"Pending",newTaskValue);
 });
 
 function appendTask(id, status,task) {
