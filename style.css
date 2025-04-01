@@ -61,13 +61,13 @@ header h1 {
   width: 10%;
 }
 #description {
-  width: 70%;
+  width: 65%;
 }
 #status {
   width: 10%;
 }
 #actions {
-  width: 10%;
+  width: 15%;
 }
 #show-tasks tbody td {
   height: 45px;
