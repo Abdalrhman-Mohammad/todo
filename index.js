@@ -5,7 +5,10 @@
   if (localStorage.getItem("tasks") == null) {
     localStorage.setItem("tasks", "");
   }
-
+  let data = localStorage.getItem("tasks").split("#");
+  for(let i=0;i<data.length-1;i+=3){
+    appendTask(data[i],data[i+1],data[i+2]);
+  }
 })();
 
 function appendTask(id, status,task) {
