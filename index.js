@@ -90,7 +90,21 @@ table.addEventListener("click", (e) => {
   } else if (e.target.id == "edit-btn") {
    
   } else if (e.target.id == "delete-btn") {
-
+    let start = tasks.indexOf(id) - 1;
+    let end = tasks.indexOf("#", start + 1);
+    if (end != -1) {
+      end = tasks.indexOf("#", end + 1);
+      if (end != -1) {
+        end = tasks.indexOf("#", end + 1);
+      }
+    }
+    if (end == -1 && start == -1) tasks = "";
+    else if (end == -1) tasks = tasks.slice(0, start);
+    else if (start == -1) tasks = tasks.slice(end + 1);
+    else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
+    localStorage.setItem("tasks", tasks);
+    updateListData();
+    // closestTr.remove();
   } else {
     return;
   }
