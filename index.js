@@ -14,7 +14,8 @@ function updateListData(){
   for (let i = 0; i < data.length - 1; i += 3) {
     appendTask(data[i], data[i + 1], data[i + 2]);
   }
-  
+  let totalElement = document.getElementById("total-tasks");
+  totalElement.innerHTML=`Total : ${Math.floor(data.length/3)}`;
 }
 let addTaskBtn = document.getElementById("add-task");
 let newTaskElement = document.getElementById("new-task");
