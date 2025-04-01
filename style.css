@@ -10,13 +10,15 @@ main {
   width: 100%;
 }
 header h1 {
-  font-size: 45px;
+  font-size: 55px;
 }
 #new-task {
-  padding: 3px;
+  padding: 7px 16px;
+  border-radius: 4px;
+  border-width: 1.5px;
 }
 #new-task::placeholder {
-  font-size: 16px;
+  font-size: 20px;
 }
 #add-task-btn {
   background-color: #f44336;
@@ -25,7 +27,11 @@ header h1 {
   border: 0;
   border-radius: 5px;
 
-  padding: 5px 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+#add-task-btn:hover {
+  cursor: pointer;
 }
 #show-tasks {
   width: 100%;
