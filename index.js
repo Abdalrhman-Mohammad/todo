@@ -47,7 +47,7 @@ addTaskBtn.addEventListener("click", () => {
       (localStorage.getItem("tasks").length == 0 ? "" : "#") +
       localStorage.getItem("id") +
       "#" +
-      "Pinding"
+      "Pending"
       +"#" +
       newTaskValue
   );
@@ -84,8 +84,8 @@ table.addEventListener("click", (e) => {
   let tasks = localStorage.getItem("tasks");
   if (e.target.id == "done-btn") {
     let start = tasks.indexOf(id) + id.length + 1;
-    let end = start + "Pinding".length;
-    if (tasks.slice(start, end) != "Pinding") return;
+    let end = start + "Pending".length;
+    if (tasks.slice(start, end) != "Pending") return;
     tasks = tasks.slice(0, start) + "Completed" + tasks.slice(end);
     localStorage.setItem("tasks", tasks);
     updateListData();
