@@ -1,24 +1,68 @@
-body{
+body,
+main,
+#show-tasks {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-header h1{
+main {
+  width: 100%;
+}
+header h1 {
   font-size: 45px;
 }
-#new-task{
-  padding: 3px ;
+#new-task {
+  padding: 3px;
 }
-#new-task::placeholder{
+#new-task::placeholder {
   font-size: 16px;
 }
-#add-task-btn{
-  background-color: #F44336;
+#add-task-btn {
+  background-color: #f44336;
   color: white;
 
-  border:0;
+  border: 0;
   border-radius: 5px;
-  
+
   padding: 5px 10px;
+}
+#show-tasks {
+  width: 100%;
+}
+#show-tasks table{
+  width: 80%;
+
+}
+#show-tasks table {
+  margin-top: 20px;
+  border-spacing: 0;
+}
+#show-tasks thead {
+  background-color:#F2F2F2;
+}
+#show-tasks td {
+  border-bottom: 1px solid rgb(202, 199, 199);
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+#show-tasks thead td {
+  font-size: 30px;
+  font-weight: bold;
+}
+#id {
+  width: 10%;
+}
+#description {
+  width: 70%;
+}
+#status {
+  width: 10%;
+}
+#actions {
+  width: 10%;
+}
+#show-tasks tbody td {
+  height: 45px;
 }
