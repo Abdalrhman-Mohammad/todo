@@ -5,12 +5,16 @@
   if (localStorage.getItem("tasks") == null) {
     localStorage.setItem("tasks", "");
   }
-  let data = localStorage.getItem("tasks").split("#");
-  for(let i=0;i<data.length-1;i+=3){
-    appendTask(data[i],data[i+1],data[i+2]);
-  }
+  updateListData();
 })();
-
+function updateListData(){
+  let tbody = document.getElementsByTagName("tbody")[0];
+  tbody.innerHTML="";
+  let data = localStorage.getItem("tasks").split("#");
+  for (let i = 0; i < data.length - 1; i += 3) {
+    appendTask(data[i], data[i + 1], data[i + 2]);
+  }
+}
 let addTaskBtn = document.getElementById("add-task");
 let newTaskElement = document.getElementById("new-task");
 
