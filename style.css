@@ -75,6 +75,6 @@ button ,#add-task-btn{
 #actions {
   width: 15%;
 }
-#show-tasks tbody td {
+#show-tasks  td {
   height: 45px;
 }
