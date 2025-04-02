@@ -20,6 +20,21 @@ header h1 {
 #new-task::placeholder {
   font-size: 20px;
 }
+#search-task{
+  margin-top: 20px;
+  width: 20%;
+}
+#search-task-by{
+  padding: 7px 16px;
+
+  width: 100%;
+  min-height: 30px;
+
+  border-radius: 4px;
+  border-width: 1.5px;
+
+  font-size: 20px;
+}
 button ,#add-task-btn{
   background-color: #f44336;
   color: white;
@@ -30,6 +45,7 @@ button ,#add-task-btn{
   padding: 8px 12px;
   font-size: 14px;
 }
+
 #done-btn {
   background-color: rgb(38, 180, 38);
 }
