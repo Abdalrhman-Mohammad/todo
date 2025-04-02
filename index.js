@@ -5,17 +5,21 @@
   if (localStorage.getItem("tasks") == null) {
     localStorage.setItem("tasks", "");
   }
-  updateListData();
+  updateListData("");
 })();
-function updateListData(){
+function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
-  tbody.innerHTML="";
+  tbody.innerHTML = "";
   let data = localStorage.getItem("tasks").split("#");
+  let total=0;
   for (let i = 0; i < data.length - 1; i += 3) {
-    appendTask(data[i], data[i + 1], data[i + 2]);
+    if (data[i + 2].indexOf(subString) != -1){
+      appendTask(data[i], data[i + 1], data[i + 2]);
+    total++;
+    }
   }
   let totalElement = document.getElementById("total-tasks");
-  totalElement.innerHTML=`Total : ${Math.floor(data.length/3)}`;
+  totalElement.innerHTML = `Total : ${total}`;
 }
 let addTaskBtn = document.getElementById("add-task");
 let newTaskElement = document.getElementById("new-task");
@@ -88,7 +92,7 @@ table.addEventListener("click", (e) => {
     if (tasks.slice(start, end) != "Pending") return;
     tasks = tasks.slice(0, start) + "Completed" + tasks.slice(end);
     localStorage.setItem("tasks", tasks);
-    updateListData();
+    updateListData("");
   } else if (e.target.id == "edit-btn") {
     let description = closestTr.querySelector("#description");
     // console.log("-----------");
@@ -142,7 +146,7 @@ table.addEventListener("click", (e) => {
     else if (start == -1) tasks = tasks.slice(end + 1);
     else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
     localStorage.setItem("tasks", tasks);
-    updateListData();
+    updateListData("");
     // closestTr.remove();
   } else {
     return;
