@@ -5,17 +5,21 @@
   if (localStorage.getItem("tasks") == null) {
     localStorage.setItem("tasks", "");
   }
-  updateListData();
+  updateListData("");
 })();
-function updateListData(){
+function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
-  tbody.innerHTML="";
+  tbody.innerHTML = "";
   let data = localStorage.getItem("tasks").split("#");
+  let total = 0;
   for (let i = 0; i < data.length - 1; i += 3) {
-    appendTask(data[i], data[i + 1], data[i + 2]);
+    if (data[i + 2].indexOf(subString) != -1) {
+      appendTask(data[i], data[i + 1], data[i + 2]);
+      total++;
+    }
   }
   let totalElement = document.getElementById("total-tasks");
-  totalElement.innerHTML=`Total : ${Math.floor(data.length/3)}`;
+  totalElement.innerHTML = `Total : ${total}`;
 }
 let addTaskBtn = document.getElementById("add-task");
 let newTaskElement = document.getElementById("new-task");
@@ -47,16 +51,16 @@ addTaskBtn.addEventListener("click", () => {
       (localStorage.getItem("tasks").length == 0 ? "" : "#") +
       localStorage.getItem("id") +
       "#" +
-      "Pending"
-      +"#" +
+      "Pending" +
+      "#" +
       newTaskValue
   );
   localStorage.setItem("id", parseInt(localStorage.getItem("id")) + 1);
   console.log(localStorage.getItem("tasks"));
-  appendTask(parseInt(localStorage.getItem("id"))-1,"Pending",newTaskValue);
+  appendTask(parseInt(localStorage.getItem("id")) - 1, "Pending", newTaskValue);
 });
 
-function appendTask(id, status,task) {
+function appendTask(id, status, task) {
   let tasks = document.getElementById("tasks");
   tasks.innerHTML += `
   <tr id="task" data-task-id="${id}">
@@ -88,7 +92,7 @@ table.addEventListener("click", (e) => {
     if (tasks.slice(start, end) != "Pending") return;
     tasks = tasks.slice(0, start) + "Completed" + tasks.slice(end);
     localStorage.setItem("tasks", tasks);
-    updateListData();
+    updateListData("");
   } else if (e.target.id == "edit-btn") {
     let description = closestTr.querySelector("#description");
     // console.log("-----------");
@@ -105,7 +109,7 @@ table.addEventListener("click", (e) => {
       let taskContent = closestTr.querySelector(".edit-task-content").value;
       taskContent = taskContent.trim();
       if (taskContent.length == 0) {
-        alert("Not allowed the todo be empty or just have spaces!!!")
+        alert("Not allowed the todo be empty or just have spaces!!!");
         return;
       }
       // console.log(taskContent);
@@ -142,10 +146,16 @@ table.addEventListener("click", (e) => {
     else if (start == -1) tasks = tasks.slice(end + 1);
     else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
     localStorage.setItem("tasks", tasks);
-    updateListData();
+    updateListData("");
     // closestTr.remove();
   } else {
     return;
   }
+});
+
+let searchElem = document.getElementById("search-task-by");
+searchElem.addEventListener("keyup", () => {
+  console.log(searchElem.value)
+  updateListData(searchElem.value);
 });
 // localStorage.clear();
