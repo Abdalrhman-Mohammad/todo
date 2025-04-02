@@ -11,11 +11,11 @@ function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
   tbody.innerHTML = "";
   let data = localStorage.getItem("tasks").split("#");
-  let total=0;
+  let total = 0;
   for (let i = 0; i < data.length - 1; i += 3) {
-    if (data[i + 2].indexOf(subString) != -1){
+    if (data[i + 2].indexOf(subString) != -1) {
       appendTask(data[i], data[i + 1], data[i + 2]);
-    total++;
+      total++;
     }
   }
   let totalElement = document.getElementById("total-tasks");
@@ -51,16 +51,16 @@ addTaskBtn.addEventListener("click", () => {
       (localStorage.getItem("tasks").length == 0 ? "" : "#") +
       localStorage.getItem("id") +
       "#" +
-      "Pending"
-      +"#" +
+      "Pending" +
+      "#" +
       newTaskValue
   );
   localStorage.setItem("id", parseInt(localStorage.getItem("id")) + 1);
   console.log(localStorage.getItem("tasks"));
-  appendTask(parseInt(localStorage.getItem("id"))-1,"Pending",newTaskValue);
+  appendTask(parseInt(localStorage.getItem("id")) - 1, "Pending", newTaskValue);
 });
 
-function appendTask(id, status,task) {
+function appendTask(id, status, task) {
   let tasks = document.getElementById("tasks");
   tasks.innerHTML += `
   <tr id="task" data-task-id="${id}">
@@ -109,7 +109,7 @@ table.addEventListener("click", (e) => {
       let taskContent = closestTr.querySelector(".edit-task-content").value;
       taskContent = taskContent.trim();
       if (taskContent.length == 0) {
-        alert("Not allowed the todo be empty or just have spaces!!!")
+        alert("Not allowed the todo be empty or just have spaces!!!");
         return;
       }
       // console.log(taskContent);
@@ -151,5 +151,11 @@ table.addEventListener("click", (e) => {
   } else {
     return;
   }
+});
+
+let searchElem = document.getElementById("search-task-by");
+searchElem.addEventListener("keyup", () => {
+  console.log(searchElem.value)
+  updateListData(searchElem.value);
 });
 // localStorage.clear();
