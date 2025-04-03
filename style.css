@@ -35,8 +35,7 @@ header h1 {
 
   font-size: 20px;
 }
-button ,#add-task-btn{
-  background-color: #f44336;
+button ,input[type="button"]{
   color: white;
 
   border: 0;
@@ -51,6 +50,12 @@ button ,#add-task-btn{
 }
 #edit-btn {
   background-color: #4088db;
+}
+#delete-btn,#add-task-btn,.cancel-task-btn{
+  background-color: #f44336;
+}
+.save-task-btn{
+  background-color: rgb(38, 180, 38);
 }
 #add-task-btn:hover,button:hover {
   cursor: pointer;
