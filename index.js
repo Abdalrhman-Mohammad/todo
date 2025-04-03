@@ -94,6 +94,8 @@ table.addEventListener("click", (e) => {
     localStorage.setItem("tasks", tasks);
     updateListData("");
   } else if (e.target.id == "edit-btn") {
+    let noEnter = closestTr.querySelector(".edit-task-content") != undefined;
+    if (noEnter) return;
     let description = closestTr.querySelector("#description");
     // console.log("-----------");
     // console.log(x);
