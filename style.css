@@ -6,6 +6,16 @@ main,
   justify-content: center;
   flex-direction: column;
 }
+#dialog{
+  border-width:1px;
+  border-radius: 10px;
+}
+#dialog >div {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
 main {
   width: 100%;
 }
@@ -51,8 +61,12 @@ button ,input[type="button"]{
 #edit-btn {
   background-color: #4088db;
 }
-#delete-btn,#add-task-btn,.cancel-task-btn{
+#delete-btn,#add-task-btn,.cancel-task-btn,#Ok-delete-task-btn{
   background-color: #f44336;
+}
+#cancel-delete-task-btn{
+  background-color: #4088db;
+
 }
 .save-task-btn{
   background-color: rgb(38, 180, 38);
