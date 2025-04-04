@@ -1,9 +1,25 @@
-(function init() {
+(async function init() {
   if (localStorage.getItem("id") == null) {
     localStorage.setItem("id", "1");
   }
   if (localStorage.getItem("tasks") == null) {
-    localStorage.setItem("tasks", "");
+    let apiTasks = await fetch("https://dummyjson.com/todos");
+    apiTasks.json().then((tasksWithoutFilters) => {
+      let tasks = "";
+      console.log(tasksWithoutFilters.todos);
+      for (let task of tasksWithoutFilters.todos) {
+        console.log(task);
+        tasks +=
+          task.id +
+          "#" +
+          (task.completed ? "Completed" : "Pending") +
+          "#" +
+          task.todo +
+          "#";
+      }
+      localStorage.setItem("tasks", tasks.slice(0, tasks.length - 1));
+      updateListData("");
+    });
   }
   updateListData("");
 })();
@@ -157,7 +173,7 @@ table.addEventListener("click", (e) => {
 
 let searchElem = document.getElementById("search-task-by");
 searchElem.addEventListener("keyup", () => {
-  console.log(searchElem.value)
+  console.log(searchElem.value);
   updateListData(searchElem.value);
 });
 // localStorage.clear();
