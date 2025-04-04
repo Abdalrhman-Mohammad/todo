@@ -1,6 +1,6 @@
 (async function init() {
   if (localStorage.getItem("id") == null) {
-    localStorage.setItem("id", "1");
+    localStorage.setItem("id", "30");
   }
   if (localStorage.getItem("tasks") == null) {
     let apiTasks = await fetch("https://dummyjson.com/todos");
@@ -151,20 +151,52 @@ table.addEventListener("click", (e) => {
       description.innerHTML = value;
     });
   } else if (e.target.id == "delete-btn") {
-    let start = tasks.indexOf(id) - 1;
-    let end = tasks.indexOf("#", start + 1);
-    if (end != -1) {
-      end = tasks.indexOf("#", end + 1);
+    let dialog = document.getElementById("dialog");
+    console.log(dialog);
+    let divInDialog = document.querySelector("#dialog div");
+
+    divInDialog.innerHTML = ` 
+    <p>
+      If you click on <em>OK</em> you will delete todo with id ${id} 
+      </p>
+      </br>
+      <div>
+      <input type="button" id="Ok-delete-task-btn" value="OK" />
+      <input type="button" id="cancel-delete-task-btn" value="cencel" />
+      </div>
+    `;
+    let tmpfun = () => {
+      let start = tasks.indexOf(id) - 1;
+      let end = tasks.indexOf("#", start + 1);
       if (end != -1) {
         end = tasks.indexOf("#", end + 1);
+        if (end != -1) {
+          end = tasks.indexOf("#", end + 1);
+        }
       }
-    }
-    if (end == -1 && start == -1) tasks = "";
-    else if (end == -1) tasks = tasks.slice(0, start);
-    else if (start == -1) tasks = tasks.slice(end + 1);
-    else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
-    localStorage.setItem("tasks", tasks);
-    updateListData("");
+      if (end == -1 && start == -1) tasks = "";
+      else if (end == -1) tasks = tasks.slice(0, start);
+      else if (start == -1) tasks = tasks.slice(end + 1);
+      else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
+      localStorage.setItem("tasks", tasks);
+      updateListData("");
+
+      dialog.close();
+      document
+        .getElementById("Ok-delete-task-btn")
+        .removeEventListener("click", tmpfun);
+    };
+
+    dialog.showModal();
+
+    document
+      .getElementById("Ok-delete-task-btn")
+      .addEventListener("click", tmpfun);
+document
+  .getElementById("cancel-delete-task-btn")
+  .addEventListener("click", ()=>{
+    dialog.close();
+  });
     // closestTr.remove();
   } else {
     return;
