@@ -1,3 +1,62 @@
+let tracking = false;
+let initx = 0;
+let inity = 0;
+let movableId = 0;
+let lastx = 0;
+let lasty = 0;
+let board = document.getElementById("b");
+let doneBoard = document.getElementById("c");
+let movingELement;
+let currectBoard;
+let mouseDownOnStcikyNote = function (e) {
+  tracking = true;
+  movingELement = e.target;
+  currectBoard = e.target.closest("#b") ?? e.target.closest("#c");
+  movableId = e.target.dataset.stickyId;
+  initx = e.clientX - e.target.offsetLeft - currectBoard.offsetLeft;
+  inity = e.clientY - e.target.offsetTop - currectBoard.offsetTop;
+};
+board.addEventListener("mousedown", mouseDownOnStcikyNote);
+doneBoard.addEventListener("mousedown", mouseDownOnStcikyNote);
+board.addEventListener("highlightext", () => {});
+let movingCard = function (e) {
+  if (
+    movingELement &&
+    e.clientX >= currectBoard.offsetLeft &&
+    e.clientX <= currectBoard.offsetLeft + currectBoard.clientWidth &&
+    e.clientY >= currectBoard.offsetTop &&
+    e.clientY <= currectBoard.offsetTop + currectBoard.clientHeight
+  ) {
+    let left = Math.min(
+      e.clientX - currectBoard.offsetLeft - initx,
+      currectBoard.clientWidth - movingELement.clientWidth - 2
+    );
+    left = Math.max(left, 2);
+    lastx = left;
+    movingELement.style.left = left + "px";
+    let top = Math.min(
+      e.clientY - currectBoard.offsetTop - inity,
+      currectBoard.clientHeight - movingELement.clientHeight - 2
+    );
+    top = Math.max(top, 2);
+    lasty = top;
+    movingELement.style.top = top + "px";
+  }
+};
+board.addEventListener("mousemove", movingCard);
+doneBoard.addEventListener("mousemove", movingCard);
+document.getElementsByTagName("body")[0].addEventListener("mouseup", (e) => {
+  tracking = false;
+  movingELement = null;
+  currectBoard = null;
+  let stickyNotes = localStorage.getItem("stickyNotes");
+  let stickyNotesData = stickyNotes.split("#");
+  let index = findIndex(movableId, stickyNotesData);
+  stickyNotesData[index + 1] = lastx;
+  stickyNotesData[index + 2] = lasty;
+  localStorage.setItem("stickyNotes", stickyNotesData.join("#"));
+});
+
 (async function init() {
   console.log("INIT");
   if (localStorage.getItem("id") == null) {
@@ -244,5 +303,5 @@ searchElem.addEventListener("keyup", () => {
   console.log(searchElem.value);
   updateListData(searchElem.value);
 });
-// localStorage.clear();
+localStorage.clear();
 // board.innerHTML ="";
