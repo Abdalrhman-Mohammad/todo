@@ -8,6 +8,47 @@ let board = document.getElementById("b");
 let doneBoard = document.getElementById("c");
 let movingELement;
 let currectBoard;
+(async function init() {
+  console.log("INIT");
+  if (localStorage.getItem("id") == null) {
+    localStorage.setItem("id", "31");
+  }
+  if (localStorage.getItem("stickyNotes") == null) {
+    localStorage.setItem("stickyNotes", "");
+  }
+  if (localStorage.getItem("tasks") == null) {
+    let apiTasks = await fetch("https://dummyjson.com/todos");
+    let c = 5;
+    apiTasks.json().then((tasksWithoutFilters) => {
+      let tasks = "";
+      let stickies = "";
+      console.log(tasksWithoutFilters.todos);
+      for (let task of tasksWithoutFilters.todos) {
+        if (c == 0) break;
+        c--;
+        console.log(task);
+        tasks +=
+          task.id +
+          "#" +
+          (task.completed ? "Completed" : "Pending") +
+          "#" +
+          task.todo +
+          "#";
+        stickies += task.id + "#0#0#";
+      }
+      localStorage.setItem("tasks", tasks.slice(0, tasks.length - 1));
+      localStorage.setItem(
+        "stickyNotes",
+        stickies.slice(0, stickies.length - 1)
+      );
+      updateListData("");
+    });
+  }
+  console.log("INIT");
+  console.log(localStorage.getItem("stickyNotes"));
+  updateListData("");
+})();
+
 let mouseDownOnStcikyNote = function (e) {
   tracking = true;
   movingELement = e.target;
@@ -57,46 +98,6 @@ document.getElementsByTagName("body")[0].addEventListener("mouseup", (e) => {
   localStorage.setItem("stickyNotes", stickyNotesData.join("#"));
 });
 
-(async function init() {
-  console.log("INIT");
-  if (localStorage.getItem("id") == null) {
-    localStorage.setItem("id", "31");
-  }
-  if (localStorage.getItem("stickyNotes") == null) {
-    localStorage.setItem("stickyNotes", "");
-  }
-  if (localStorage.getItem("tasks") == null) {
-    let apiTasks = await fetch("https://dummyjson.com/todos");
-    let c = 5;
-    apiTasks.json().then((tasksWithoutFilters) => {
-      let tasks = "";
-      let stickies = "";
-      console.log(tasksWithoutFilters.todos);
-      for (let task of tasksWithoutFilters.todos) {
-        if (c == 0) break;
-        c--;
-        console.log(task);
-        tasks +=
-          task.id +
-          "#" +
-          (task.completed ? "Completed" : "Pending") +
-          "#" +
-          task.todo +
-          "#";
-        stickies += task.id + "#0#0#";
-      }
-      localStorage.setItem("tasks", tasks.slice(0, tasks.length - 1));
-      localStorage.setItem(
-        "stickyNotes",
-        stickies.slice(0, stickies.length - 1)
-      );
-      updateListData("");
-    });
-  }
-  console.log("INIT");
-  console.log(localStorage.getItem("stickyNotes"));
-  updateListData("");
-})();
 function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
   tbody.innerHTML = "";
@@ -108,7 +109,7 @@ function updateListData(subString) {
   let total = 0;
   for (let i = 0; i < data.length - 1; i += 3) {
     if (data[i + 2].indexOf(subString) != -1) {
-      appendTask(data[i], data[i + 1], data[i + 2]);
+      appendTask(data[i], data[i + 1], data[i + 2],stickyNotesData[i + 1],stickyNotesData[i + 2]);
       total++;
     }
   }
@@ -303,5 +304,5 @@ searchElem.addEventListener("keyup", () => {
   console.log(searchElem.value);
   updateListData(searchElem.value);
 });
-localStorage.clear();
+// localStorage.clear();
 // board.innerHTML ="";
