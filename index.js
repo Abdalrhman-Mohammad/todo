@@ -245,6 +245,8 @@ table.addEventListener("click", (e) => {
       tasks = tasks.split("#");
       let index = findIndex(id, tasks);
       tasks[index + 2] = taskContent;;
+      let stickNodeForId=document.querySelector(`.inner[data-sticky-id='${id}'] span`);
+      stickNodeForId.innerHTML = taskContent;
       description.innerHTML = taskContent;
       localStorage.setItem("tasks", tasks.join("#"));
     });
