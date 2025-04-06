@@ -88,6 +88,10 @@ span {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
+}
+#dialog div div {
+    display: flex;
 }
 #first-main {
   width: 100%;
