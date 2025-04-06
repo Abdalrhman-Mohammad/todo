@@ -1,13 +1,31 @@
+let tracking = false;
+let initx = 0;
+let inity = 0;
+let movableId = 0;
+let lastx = 0;
+let lasty = 0;
+let board = document.getElementById("b");
+let doneBoard = document.getElementById("c");
+let movingELement;
+let currectBoard;
 (async function init() {
+  console.log("INIT");
   if (localStorage.getItem("id") == null) {
     localStorage.setItem("id", "31");
   }
+  if (localStorage.getItem("stickyNotes") == null) {
+    localStorage.setItem("stickyNotes", "");
+  }
   if (localStorage.getItem("tasks") == null) {
     let apiTasks = await fetch("https://dummyjson.com/todos");
+    let c = 5;
     apiTasks.json().then((tasksWithoutFilters) => {
       let tasks = "";
+      let stickies = "";
       console.log(tasksWithoutFilters.todos);
       for (let task of tasksWithoutFilters.todos) {
+        if (c == 0) break;
+        c--;
         console.log(task);
         tasks +=
           task.id +
@@ -16,21 +34,82 @@
           "#" +
           task.todo +
           "#";
+        stickies += task.id + "#0#0#";
       }
       localStorage.setItem("tasks", tasks.slice(0, tasks.length - 1));
+      localStorage.setItem(
+        "stickyNotes",
+        stickies.slice(0, stickies.length - 1)
+      );
       updateListData("");
     });
   }
+  console.log("INIT");
+  console.log(localStorage.getItem("stickyNotes"));
   updateListData("");
 })();
+
+let mouseDownOnStcikyNote = function (e) {
+  tracking = true;
+  movingELement = e.target;
+  currectBoard = e.target.closest("#b") ?? e.target.closest("#c");
+  movableId = e.target.dataset.stickyId;
+  initx = e.clientX - e.target.offsetLeft - currectBoard.offsetLeft;
+  inity = e.clientY - e.target.offsetTop - currectBoard.offsetTop;
+};
+board.addEventListener("mousedown", mouseDownOnStcikyNote);
+doneBoard.addEventListener("mousedown", mouseDownOnStcikyNote);
+board.addEventListener("highlightext", () => {});
+let movingCard = function (e) {
+  if (
+    movingELement &&
+    e.clientX >= currectBoard.offsetLeft &&
+    e.clientX <= currectBoard.offsetLeft + currectBoard.clientWidth &&
+    e.clientY >= currectBoard.offsetTop &&
+    e.clientY <= currectBoard.offsetTop + currectBoard.clientHeight
+  ) {
+    let left = Math.min(
+      e.clientX - currectBoard.offsetLeft - initx,
+      currectBoard.clientWidth - movingELement.clientWidth - 2
+    );
+    left = Math.max(left, 2);
+    lastx = left;
+    movingELement.style.left = left + "px";
+    let top = Math.min(
+      e.clientY - currectBoard.offsetTop - inity,
+      currectBoard.clientHeight - movingELement.clientHeight - 2
+    );
+    top = Math.max(top, 2);
+    lasty = top;
+    movingELement.style.top = top + "px";
+  }
+};
+board.addEventListener("mousemove", movingCard);
+doneBoard.addEventListener("mousemove", movingCard);
+document.getElementsByTagName("body")[0].addEventListener("mouseup", (e) => {
+  tracking = false;
+  movingELement = null;
+  currectBoard = null;
+  let stickyNotes = localStorage.getItem("stickyNotes");
+  let stickyNotesData = stickyNotes.split("#");
+  let index = findIndex(movableId, stickyNotesData);
+  stickyNotesData[index + 1] = lastx;
+  stickyNotesData[index + 2] = lasty;
+  localStorage.setItem("stickyNotes", stickyNotesData.join("#"));
+});
+
 function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
   tbody.innerHTML = "";
+  board.innerHTML = "";
+  doneBoard.innerHTML = "";
   let data = localStorage.getItem("tasks").split("#");
+  let stickyNotesData = localStorage.getItem("stickyNotes").split("#");
+  console.log(stickyNotesData);
   let total = 0;
   for (let i = 0; i < data.length - 1; i += 3) {
     if (data[i + 2].indexOf(subString) != -1) {
-      appendTask(data[i], data[i + 1], data[i + 2]);
+      appendTask(data[i], data[i + 1], data[i + 2],stickyNotesData[i + 1],stickyNotesData[i + 2]);
       total++;
     }
   }
@@ -71,12 +150,19 @@ addTaskBtn.addEventListener("click", () => {
       "#" +
       newTaskValue
   );
+  localStorage.setItem(
+    "stickyNotes",
+    localStorage.getItem("stickyNotes") +
+      (localStorage.getItem("stickyNotes").length == 0 ? "" : "#") +
+      localStorage.getItem("id") +
+      "#0#0"
+  );
+  appendTask(parseInt(localStorage.getItem("id")), "Pending", newTaskValue);
   localStorage.setItem("id", parseInt(localStorage.getItem("id")) + 1);
   console.log(localStorage.getItem("tasks"));
-  appendTask(parseInt(localStorage.getItem("id")) - 1, "Pending", newTaskValue);
 });
 
-function appendTask(id, status, task) {
+function appendTask(id, status, task, left, top) {
   let tasks = document.getElementById("tasks");
   tasks.innerHTML += `
   <tr id="task" data-task-id="${id}">
@@ -90,6 +176,15 @@ function appendTask(id, status, task) {
             </td>
   </tr>
             `;
+  if (status == "Pending")
+    board.innerHTML += `
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span>${task}</span></div>
+      `;
+  else
+    doneBoard.innerHTML += `
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span 
+      >${task}</span></div>
+      `;
 }
 
 function findIndex(id,tasks){
@@ -131,7 +226,7 @@ table.addEventListener("click", (e) => {
     // console.log(x);
     let value = description.innerHTML;
     description.innerHTML = `
-    <input type="text" class="edit-task-content" placeholder="Add new task..." value="${value}"/>
+  <input type="text" class="edit-task-content" placeholder="Add new task..." value="${value}" style="display:block; justify-self:center;"/>
       <input type="button" class="save-task-btn" value="save" />
       <input type="button" class="cancel-task-btn" value="cancel" />
     `;
@@ -150,6 +245,8 @@ table.addEventListener("click", (e) => {
       tasks = tasks.split("#");
       let index = findIndex(id, tasks);
       tasks[index + 2] = taskContent;;
+      let stickNodeForId=document.querySelector(`.inner[data-sticky-id='${id}'] span`);
+      stickNodeForId.innerHTML = taskContent;
       description.innerHTML = taskContent;
       localStorage.setItem("tasks", tasks.join("#"));
     });
@@ -209,3 +306,4 @@ searchElem.addEventListener("keyup", () => {
   updateListData(searchElem.value);
 });
 // localStorage.clear();
+// board.innerHTML ="";
