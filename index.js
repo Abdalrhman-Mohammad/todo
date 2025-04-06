@@ -1,6 +1,6 @@
 (async function init() {
   if (localStorage.getItem("id") == null) {
-    localStorage.setItem("id", "30");
+    localStorage.setItem("id", "31");
   }
   if (localStorage.getItem("tasks") == null) {
     let apiTasks = await fetch("https://dummyjson.com/todos");
@@ -92,6 +92,19 @@ function appendTask(id, status, task) {
             `;
 }
 
+function findIndex(id,tasks){
+  let tmp=-1;
+  let index=-1;
+  console.log(tasks.indexOf(id,tmp+1))
+  while(tasks.indexOf(id,tmp+1)!=-1&&tasks.indexOf(id,tmp+1)%3!=0){
+    console.log(tmp);  
+    tmp = tasks.indexOf(id, tmp+1);
+    console.log(tmp);  
+  
+  }
+  index = tasks.indexOf(id, tmp + 1);
+  return index;
+}
 let table = document.getElementsByTagName("table")[0];
 table.addEventListener("click", (e) => {
   // console.log(e.currentTarget);
@@ -103,11 +116,12 @@ table.addEventListener("click", (e) => {
   let id = closestTr.dataset.taskId;
   let tasks = localStorage.getItem("tasks");
   if (e.target.id == "done-btn") {
-    let start = tasks.indexOf(id) + id.length + 1;
-    let end = start + "Pending".length;
-    if (tasks.slice(start, end) != "Pending") return;
-    tasks = tasks.slice(0, start) + "Completed" + tasks.slice(end);
-    localStorage.setItem("tasks", tasks);
+    tasks=tasks.split("#");
+    let index=findIndex(id,tasks);
+    console.log(index);
+    if (tasks[index+1] != "Pending") return;
+    tasks[index+1]="Completed";
+    localStorage.setItem("tasks", tasks.join("#"));
     updateListData("");
   } else if (e.target.id == "edit-btn") {
     let noEnter = closestTr.querySelector(".edit-task-content") != undefined;
@@ -133,19 +147,11 @@ table.addEventListener("click", (e) => {
       // console.log(taskContent);
       // console.log(taskContent, "-----------");
       // console.log(closestTr.querySelector(".edit-task-content"), "-----------");
-      let start = tasks.indexOf(id);
-      if (start != -1) {
-        start = tasks.indexOf("#", start + 1);
-        if (start != -1) start = tasks.indexOf("#", start + 1);
-      }
-      let end = tasks.indexOf("#", start + 1);
-      if (end == -1) end = tasks.length;
-      // console.log(tasks);
-      // console.log(tasks.slice(0, start+1) + taskContent + tasks.slice(end));
-      // console.log(start, end);
-      tasks = tasks.slice(0, start + 1) + taskContent + tasks.slice(end);
+      tasks = tasks.split("#");
+      let index = findIndex(id, tasks);
+      tasks[index + 2] = taskContent;;
       description.innerHTML = taskContent;
-      localStorage.setItem("tasks", tasks);
+      localStorage.setItem("tasks", tasks.join("#"));
     });
     cancelTask.addEventListener("click", () => {
       description.innerHTML = value;
@@ -166,19 +172,13 @@ table.addEventListener("click", (e) => {
       </div>
     `;
     let tmpfun = () => {
-      let start = tasks.indexOf(id) - 1;
-      let end = tasks.indexOf("#", start + 1);
-      if (end != -1) {
-        end = tasks.indexOf("#", end + 1);
-        if (end != -1) {
-          end = tasks.indexOf("#", end + 1);
-        }
-      }
-      if (end == -1 && start == -1) tasks = "";
-      else if (end == -1) tasks = tasks.slice(0, start);
-      else if (start == -1) tasks = tasks.slice(end + 1);
-      else tasks = tasks.slice(0, start) + tasks.slice(end - 1);
-      localStorage.setItem("tasks", tasks);
+      tasks = tasks.split("#");
+      let index = findIndex(id, tasks);
+      tasks1 = tasks.slice(0, index);
+      tasks2 = index + 3 < tasks.length ? tasks.slice(index + 3) : [];
+      tasks=[...tasks1,...tasks2];
+      console.log(tasks)
+      localStorage.setItem("tasks", tasks.join("#"));
       updateListData("");
 
       dialog.close();
