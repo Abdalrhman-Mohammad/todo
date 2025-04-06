@@ -178,13 +178,12 @@ function appendTask(id, status, task, left, top) {
             `;
   if (status == "Pending")
     board.innerHTML += `
-      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span><span 
-      >${task}</span></span></div>
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span>${task}</span></div>
       `;
   else
     doneBoard.innerHTML += `
-      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span><span 
-      >${task}</span></span></div>
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span 
+      >${task}</span></div>
       `;
 }
 
