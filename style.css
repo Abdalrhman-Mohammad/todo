@@ -21,6 +21,64 @@ div {
   width: 33%;
 }
 
+
+#b {
+  background-color: #ffe994;
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 4px;
+  overflow: hidden;
+}
+#c {
+  background-color: #ffe994;
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 4px;
+}
+#outerb,
+#outerc {
+  margin: 10px;
+}
+.todos-title {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  background-color: #ffd966;
+  border-radius: 4px;
+}
+#outerc .todos-title{
+  background-color: #ff8049;
+}
+span {
+  font-size: 14px;
+}
+#c {
+  background-color: #fcd19c;
+}
+.inner {
+  background-color: #ffd966;
+  height: 150px;
+  width: 150px;
+  
+  /* box-shadow: -62px 62px 0 -58px   #ffe994,0 0 3px grey; */
+  box-shadow:0 0 3px rgb(171, 167, 167);
+
+  position: absolute;
+  left: 2;
+  top: 2;
+}
+#outerc .inner{
+  background-color: #ff8049;
+}
+
+
 #dialog{
   border-width:1px;
   border-radius: 10px;
