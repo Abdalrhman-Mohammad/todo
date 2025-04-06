@@ -1,13 +1,21 @@
 (async function init() {
+  console.log("INIT");
   if (localStorage.getItem("id") == null) {
     localStorage.setItem("id", "31");
   }
+  if (localStorage.getItem("stickyNotes") == null) {
+    localStorage.setItem("stickyNotes", "");
+  }
   if (localStorage.getItem("tasks") == null) {
     let apiTasks = await fetch("https://dummyjson.com/todos");
+    let c = 5;
     apiTasks.json().then((tasksWithoutFilters) => {
       let tasks = "";
+      let stickies = "";
       console.log(tasksWithoutFilters.todos);
       for (let task of tasksWithoutFilters.todos) {
+        if (c == 0) break;
+        c--;
         console.log(task);
         tasks +=
           task.id +
@@ -16,17 +24,28 @@
           "#" +
           task.todo +
           "#";
+        stickies += task.id + "#0#0#";
       }
       localStorage.setItem("tasks", tasks.slice(0, tasks.length - 1));
+      localStorage.setItem(
+        "stickyNotes",
+        stickies.slice(0, stickies.length - 1)
+      );
       updateListData("");
     });
   }
+  console.log("INIT");
+  console.log(localStorage.getItem("stickyNotes"));
   updateListData("");
 })();
 function updateListData(subString) {
   let tbody = document.getElementsByTagName("tbody")[0];
   tbody.innerHTML = "";
+  board.innerHTML = "";
+  doneBoard.innerHTML = "";
   let data = localStorage.getItem("tasks").split("#");
+  let stickyNotesData = localStorage.getItem("stickyNotes").split("#");
+  console.log(stickyNotesData);
   let total = 0;
   for (let i = 0; i < data.length - 1; i += 3) {
     if (data[i + 2].indexOf(subString) != -1) {
@@ -71,12 +90,19 @@ addTaskBtn.addEventListener("click", () => {
       "#" +
       newTaskValue
   );
+  localStorage.setItem(
+    "stickyNotes",
+    localStorage.getItem("stickyNotes") +
+      (localStorage.getItem("stickyNotes").length == 0 ? "" : "#") +
+      localStorage.getItem("id") +
+      "#0#0"
+  );
+  appendTask(parseInt(localStorage.getItem("id")), "Pending", newTaskValue);
   localStorage.setItem("id", parseInt(localStorage.getItem("id")) + 1);
   console.log(localStorage.getItem("tasks"));
-  appendTask(parseInt(localStorage.getItem("id")) - 1, "Pending", newTaskValue);
 });
 
-function appendTask(id, status, task) {
+function appendTask(id, status, task, left, top) {
   let tasks = document.getElementById("tasks");
   tasks.innerHTML += `
   <tr id="task" data-task-id="${id}">
@@ -90,6 +116,16 @@ function appendTask(id, status, task) {
             </td>
   </tr>
             `;
+  if (status == "Pending")
+    board.innerHTML += `
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span><span 
+      >${task}</span></span></div>
+      `;
+  else
+    doneBoard.innerHTML += `
+      <div class="inner" data-sticky-id=${id} style="left:${left}px;top:${top}px;"><span><span 
+      >${task}</span></span></div>
+      `;
 }
 
 function findIndex(id,tasks){
@@ -131,7 +167,7 @@ table.addEventListener("click", (e) => {
     // console.log(x);
     let value = description.innerHTML;
     description.innerHTML = `
-    <input type="text" class="edit-task-content" placeholder="Add new task..." value="${value}"/>
+  <input type="text" class="edit-task-content" placeholder="Add new task..." value="${value}" style="display:block; justify-self:center;"/>
       <input type="button" class="save-task-btn" value="save" />
       <input type="button" class="cancel-task-btn" value="cancel" />
     `;
@@ -209,3 +245,4 @@ searchElem.addEventListener("keyup", () => {
   updateListData(searchElem.value);
 });
 // localStorage.clear();
+// board.innerHTML ="";
