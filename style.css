@@ -150,7 +150,7 @@ button ,input[type="button"]{
 .save-task-btn{
   background-color: rgb(38, 180, 38);
 }
-#add-task-btn:hover,button:hover {
+#add-task-btn:hover,button:hover ,input[type="button"]:hover{
   cursor: pointer;
 }
 #show-tasks {
