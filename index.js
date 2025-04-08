@@ -87,15 +87,20 @@ let movingCard = function (e) {
 board.addEventListener("mousemove", movingCard);
 doneBoard.addEventListener("mousemove", movingCard);
 document.getElementsByTagName("body")[0].addEventListener("mouseup", (e) => {
+  if(!movableId)
+    return;
   tracking = false;
   movingELement = null;
   currectBoard = null;
   let stickyNotes = localStorage.getItem("stickyNotes");
   let stickyNotesData = stickyNotes.split("#");
+  console.log(stickyNotesData);
   let index = findIndex(movableId, stickyNotesData);
   stickyNotesData[index + 1] = lastx;
   stickyNotesData[index + 2] = lasty;
+  console.log(stickyNotesData);
   localStorage.setItem("stickyNotes", stickyNotesData.join("#"));
+  movableId=null;
 });
 
 function updateListData(subString) {
@@ -119,7 +124,9 @@ function updateListData(subString) {
 let addTaskBtn = document.getElementById("add-task");
 let newTaskElement = document.getElementById("new-task");
 
-addTaskBtn.addEventListener("click", () => {
+addTaskBtn.addEventListener("click", (e) => {
+  if(e.target==newTaskElement)
+    return;
   console.log("clicked");
 
   let newTaskValue = newTaskElement.value;
@@ -270,12 +277,16 @@ table.addEventListener("click", (e) => {
     `;
     let tmpfun = () => {
       tasks = tasks.split("#");
+      let srickies=localStorage.getItem("stickyNotes");
+      srickies = srickies.split("#");
       let index = findIndex(id, tasks);
-      tasks1 = tasks.slice(0, index);
-      tasks2 = index + 3 < tasks.length ? tasks.slice(index + 3) : [];
+      let srickies1 = srickies.slice(0, index);
+      let srickies2 = index + 3 < srickies.length ? srickies.slice(index + 3) : [];
       tasks=[...tasks1,...tasks2];
+      srickies = [...srickies1, ...srickies2];
       console.log(tasks)
       localStorage.setItem("tasks", tasks.join("#"));
+      localStorage.setItem("stickyNotes", srickies.join("#"));
       updateListData("");
 
       dialog.close();
