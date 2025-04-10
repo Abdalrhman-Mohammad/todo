@@ -282,6 +282,8 @@ table.addEventListener("click", (e) => {
       let index = findIndex(id, tasks);
       let srickies1 = srickies.slice(0, index);
       let srickies2 = index + 3 < srickies.length ? srickies.slice(index + 3) : [];
+       let tasks1 = tasks.slice(0, index);
+       let tasks2 = index + 3 < tasks.length ? tasks.slice(index + 3) : [];
       tasks=[...tasks1,...tasks2];
       srickies = [...srickies1, ...srickies2];
       console.log(tasks)
