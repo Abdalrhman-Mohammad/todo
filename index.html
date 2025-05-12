@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="a">
+    <dialog id="dialog">
+      <div></div>
+    </dialog>
+    <header>
+      <h1>TODO List</h1>
+    </header>
+    <main id="first-main">
+      <section id="add-task">
+        <input type="text" id="new-task" placeholder="Add new task..." />
+        <input type="button" id="add-task-btn" value="Add" />
+      </section>
+      <section id="search-task">
+        <input type="text" id="search-task-by" placeholder="add any character in the task..." />
+      </section>
+      <section id="show-tasks">
+        <table>
+          <thead>
+            <tr>
+              <td id="id">ID</td>
+              <td id="description">TODO Description</td>
+              <td id="status">Status</td>
+              <td id="actions">Actions</td>
+            </tr>
+          </thead>
+          <tbody id="tasks">
+            <tr>
+              <td>1</td>
+              <td>Task 1</td>
+              <td>Done</td>
+              <td>
+                <button id="edit">Edit</button>
+                <button id="delete">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Task 1</td>
+              <td>Done</td>
+              <td>
+                <button id="edit">Edit</button>
+                <button id="delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" id="total-tasks"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div id="outerb">
+    <div class="todos-title">
+      <p style="user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">TODOS
+      </p>
+    </div>
+    <div id="b">
+    </div>
+  </div>
+  <div id="outerc">
+    <div class="todos-title">
+      <p style="user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;">Done</p>
+    </div>
+    <div id="c">
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+
+</html>
